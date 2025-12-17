@@ -24,7 +24,7 @@ jobs:
         run: |
           ZIP="Monocraft-${VERSION}.zip"
           rm -f "$ZIP"
-          zip -r "$ZIP" assets pack.mcmeta pack.png
+          zip -r "$ZIP" assets pack.mcmeta pack.png README.md LICENSE.md
 
       - name: Upload to Modrinth
         uses: Kir-Antipov/mc-publish@v3.3
