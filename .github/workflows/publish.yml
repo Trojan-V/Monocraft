@@ -1,0 +1,34 @@
+name: Publish to Modrinth
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build resourcepack ZIP
+        shell: bash
+        run: |
+          ZIP="Monocraft-${GITHUB_REF_NAME}.zip"
+          rm -f "$ZIP"
+          zip -r "$ZIP" assets pack.mcmeta pack.png
+
+      - name: Upload to Modrinth
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_PROJECT_SLUG }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          files: '*.zip'
+          name: "Monocraft-${{ github.ref_name }}"
+          version: ${{ github.ref_name }}
+          version-type: release
+          changelog-file: CHANGELOG.md
+          game-versions: |
+            1.21.8
